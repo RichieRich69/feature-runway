@@ -1,0 +1,10 @@
+name = "feature-runway"
+main = "functions/page-data.js"
+compatibility_date = "2025-08-13"
+
+[[durable_objects.bindings]]
+name = "PAGE_DATA"
+class_name = "PageDataDO"
+
+[env.production]
+# Add production-specific settings here

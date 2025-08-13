@@ -238,7 +238,7 @@
   <body>
     <div class="wrap">
       <div class="topbar">
-        <h1>Feature Environment Board</h1>
+        <h1>Retail Feature Environment Runway</h1>
         <div class="rhs">
           <span class="tag">Local-only draft • persists to browser</span>
           <span class="reset" id="resetSeed">Reset sample data</span>
@@ -356,7 +356,18 @@
       (function () {
         "use strict";
         /*** Constants ***/
-        const ENVIRONMENTS = ["Feature 1 BW", "Feature 1 BG", "Feature 2 BW", "Feature 2 BG", "Feature 3 BW", "Feature 3 BG", "Feature 4 BW", "Feature 4 BG", "Demo BW", "Demo BG"];
+        const ENVIRONMENTS = [
+          { name: "Feature 1 BW", url: "https://capricornro-retail-feature1-bw.azurewebsites.net/home" },
+          { name: "Feature 1 BG", url: "https://capricornro-retail-feature1.azurewebsites.net/home" },
+          { name: "Feature 2 BW", url: "https://capricornro-retail-feature2-bw.azurewebsites.net/home" },
+          { name: "Feature 2 BG", url: "https://capricornro-retail-feature2.azurewebsites.net/home" },
+          { name: "Feature 3 BW", url: "https://capricornro-retail-feature3-bw.azurewebsites.net/home" },
+          { name: "Feature 3 BG", url: "https://capricornro-retail-feature3.azurewebsites.net/home" },
+          { name: "Feature 4 BW", url: "https://capricornro-retail-feature4-bw.azurewebsites.net/home" },
+          { name: "Feature 4 BG", url: "https://capricornro-retail-feature4.azurewebsites.net/home" },
+          { name: "Demo BW", url: "https://capricornro-retail-demo-bw.azurewebsites.net/home" },
+          { name: "Demo BG", url: "https://capricornro-retail-demo-bg.azurewebsites.net/home" },
+        ];
         const STATUS = {
           available: { emoji: "🟢", label: "Available" },
           testing: { emoji: "🟡", label: "Testing" },
@@ -386,19 +397,30 @@
             timeZone: ZONE,
           });
         }
-        function save() {
+
+        async function save() {
           if (__TEST_MODE) return;
           try {
-            localStorage.setItem(LS_KEY, JSON.stringify(state));
-          } catch {}
+            await fetch("/api/page-data", {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({ data: state }),
+            });
+          } catch (e) {
+            console.warn("Failed to save to server", e);
+          }
         }
-        function load() {
+
+        async function load() {
           try {
-            const j = localStorage.getItem(LS_KEY);
-            if (j) {
-              return JSON.parse(j);
+            const res = await fetch("/api/page-data");
+            if (res.ok) {
+              const json = await res.json();
+              return json.data;
             }
-          } catch {}
+          } catch (e) {
+            console.warn("Failed to load from server", e);
+          }
           return null;
         }
 
@@ -425,7 +447,22 @@
         }
 
         /*** State ***/
-        let state = load() || seed();
+        let state = null;
+        (async function () {
+          state = await load();
+          if (!state) state = seed();
+          // After state is loaded, continue initializing UI
+          fillEnv();
+          fillStories();
+          fillPeople(qaSel, state.qaPeople);
+          fillPeople(devSel, state.devPeople);
+          renderTable();
+          renderStoryAdminList();
+          renderPeopleAdminLists();
+          storySel.setAttribute("data-current", "");
+          qaSel.setAttribute("data-current", "");
+          devSel.setAttribute("data-current", "");
+        })();
 
         /*** DOM ***/
         const boardBody = document.getElementById("boardBody");
@@ -454,30 +491,22 @@
 
         /*** Select builders ***/
         function fillEnv() {
-          envSel.innerHTML = ENVIRONMENTS.map((e) => `<option value="${escapeHtml(e)}">${escapeHtml(e)}</option>`).join("");
+          envSel.innerHTML = ENVIRONMENTS.map((e) => `<option value="${escapeHtml(e.name)}">${escapeHtml(e.name)}</option>`).join("");
         }
         function fillPeople(select, list) {
-          const options = [
-            '<option value="">— None —</option>',
-            ...list.filter(Boolean).map((n) => `<option value="${escapeHtml(n)}">${escapeHtml(n)}</option>`),
-            '<option value="__add__">➕ Add…</option>',
-            '<option value="__remove__">➖ Remove selected</option>',
-          ];
+          const options = ['<option value="">— None —</option>', ...list.filter(Boolean).map((n) => `<option value="${escapeHtml(n)}">${escapeHtml(n)}</option>`)];
           select.innerHTML = options.join("");
         }
         function fillStories() {
-          const opts = [
-            '<option value="">— None —</option>',
-            ...state.stories.map((s) => `<option value="${escapeHtml(s.id)}">${escapeHtml(truncate(s.title, 90))}</option>`),
-            '<option value="__add__">➕ Add story…</option>',
-            '<option value="__remove__">➖ Remove selected</option>',
-          ];
+          const opts = ['<option value="">— None —</option>', ...state.stories.map((s) => `<option value="${escapeHtml(s.id)}">${escapeHtml(truncate(s.title, 90))}</option>`)];
           storySel.innerHTML = opts.join("");
         }
 
         /*** Render table ***/
         function renderTable() {
-          const rowsHtml = ENVIRONMENTS.map((env) => {
+          const rowsHtml = ENVIRONMENTS.map((envObj) => {
+            const env = envObj.name;
+            const envUrl = envObj.url;
             const r = state.rows[env] || { status: "available", storyId: "", qa: "", dev: "", changed: "" };
             const st = STATUS[r.status] || STATUS.available;
             const story = state.stories.find((s) => s.id === r.storyId);
@@ -485,9 +514,10 @@
             const qaHtml = r.qa ? escapeHtml(r.qa) : '<span class="muted">—</span>';
             const devHtml = r.dev ? escapeHtml(r.dev) : '<span class="muted">—</span>';
             const changedHtml = r.changed ? escapeHtml(r.changed) : '<span class="muted">—</span>';
+            const envHtml = envUrl ? `<a href="${escapeHtml(envUrl)}" target="_blank" rel="noopener">${escapeHtml(env)} <span title=\"Open environment\"></span></a>` : escapeHtml(env);
             return `<tr>
-        <td>${escapeHtml(env)}</td>
-        <td style="text-align:center"><span class="emoji">${st.emoji}</span></td>
+        <td>${envHtml}</td>
+        <td style="text-align:center"><span class="emoji">${st.emoji}</span> <span>${escapeHtml(st.label)}</span></td>
         <td>${storyHtml}</td>
         <td>${qaHtml}</td>
         <td>${devHtml}</td>
