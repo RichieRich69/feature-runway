@@ -1,0 +1,10 @@
+name = "page-data-do"
+main = "src/index.js"
+compatibility_date = "2025-08-13"
+
+[durable_objects]
+bindings = [{ name = "PAGE_DATA", class_name = "PageDataDO" }]
+
+[[migrations]]
+tag = "v1"
+new_sqlite_classes = ["PageDataDO"]

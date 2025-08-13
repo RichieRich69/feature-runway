@@ -3,12 +3,7 @@ compatibility_date = "2025-08-13"
 pages_build_output_dir = "."
 
 [durable_objects]
-# Bind to the class defined in this project (no script_name needed)
 bindings = [
-  { name = "PAGE_DATA", class_name = "PageDataDO" }
+  # NOTE: script_name points at the Worker you deployed in Step 1.
+  { name = "PAGE_DATA", class_name = "PageDataDO", script_name = "page-data-do" }
 ]
-
-# First-time DO migration
-[[migrations]]
-tag = "v1"
-new_classes = ["PageDataDO"]
