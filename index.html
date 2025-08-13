@@ -242,6 +242,7 @@
         <div class="rhs">
           <span class="tag">Local-only draft • persists to browser</span>
           <span class="reset" id="resetSeed">Reset sample data</span>
+          <a href="edit.html" class="edit-link">Edit Stories & People</a>
         </div>
       </div>
 
@@ -251,7 +252,7 @@
           <thead>
             <tr>
               <th>Environment</th>
-              <th style="text-align: center">Status</th>
+              <th class="text-center">Status</th>
               <th>User Story</th>
               <th>QA / Tester</th>
               <th>Developer</th>
@@ -266,14 +267,14 @@
       <div class="admin">
         <!-- Form 1: Environment update (drives the table above) -->
         <div class="card form-card">
-          <h3 style="margin: 0 0 8px">Environment update</h3>
+          <h3 class="mb-8">Environment update</h3>
           <form id="envUpdateForm" autocomplete="off">
-            <div style="display: grid; grid-template-columns: 1fr 2.2fr 1fr; gap: 18px 24px; align-items: end; margin-bottom: 0">
+            <div class="env-form-grid">
               <div>
                 <label for="env">Environment</label>
                 <select id="env"></select>
               </div>
-              <div style="grid-column: span 2">
+              <div class="span-2">
                 <label for="story">User Story</label>
                 <select id="story"></select>
               </div>
@@ -294,8 +295,8 @@
                 <label for="dev">Developer</label>
                 <select id="dev"></select>
               </div>
-              <div style="grid-column: 3 / 4; display: flex; justify-content: flex-end; align-items: end; margin-top: 8px">
-                <button class="primary" id="submit" type="button" style="min-width: 120px">Submit</button>
+              <div class="env-submit">
+                <button class="primary minw-120" id="submit" type="button">Submit</button>
               </div>
             </div>
           </form>
@@ -303,8 +304,8 @@
 
         <!-- Form 2: Story CRUD -->
         <div class="card form-card">
-          <h3 style="margin: 0 0 8px">Manage User Stories</h3>
-          <div class="form-grid" style="margin-bottom: 8px">
+          <h3 class="mb-8">Manage User Stories</h3>
+          <div class="form-grid mb-8">
             <div>
               <label for="storyTitleIn">Title</label>
               <input id="storyTitleIn" placeholder="Story title" />
@@ -327,24 +328,24 @@
 
         <!-- Form 3: People CRUD -->
         <div class="card form-card">
-          <h3 style="margin: 0 8px 12px 0">Manage People</h3>
-          <div class="inline" style="margin-bottom: 8px">
-            <div style="flex: 1">
+          <h3 class="mb-12">Manage People</h3>
+          <div class="inline mb-8">
+            <div class="flex-1">
               <label for="qaAddIn">QA / Tester</label>
               <div class="inline"><input id="qaAddIn" placeholder="Name" /><button id="qaAddBtn" type="button">Add</button></div>
             </div>
-            <div style="flex: 1">
+            <div class="flex-1">
               <label for="devAddIn">Developer</label>
               <div class="inline"><input id="devAddIn" placeholder="Name" /><button id="devAddBtn" type="button">Add</button></div>
             </div>
           </div>
-          <div class="inline" style="gap: 20px">
-            <div style="flex: 1">
-              <strong class="tiny" style="display: block; margin-bottom: 6px">QA / Testers</strong>
+          <div class="inline gap-20">
+            <div class="flex-1">
+              <strong class="tiny block mb-8">QA / Testers</strong>
               <ul id="qaList" class="list" aria-label="QA list"></ul>
             </div>
-            <div style="flex: 1">
-              <strong class="tiny" style="display: block; margin-bottom: 6px">Developers</strong>
+            <div class="flex-1">
+              <strong class="tiny block mb-8">Developers</strong>
               <ul id="devList" class="list" aria-label="Dev list"></ul>
             </div>
           </div>
