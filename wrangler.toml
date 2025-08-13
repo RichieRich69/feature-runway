@@ -6,5 +6,4 @@ compatibility_date = "2025-08-13"
 name = "PAGE_DATA"
 class_name = "PageDataDO"
 
-[env.production]
-# Add production-specific settings here
+pages_build_output_dir = "."
