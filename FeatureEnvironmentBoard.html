@@ -1,0 +1,853 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Feature Environment Board</title>
+    <style>
+      :root {
+        --cm: 38px; /* ~1cm on most displays */
+        --gap: 12px;
+        --radius: 14px;
+        --card: #ffffff;
+        --muted: #6b7280; /* slate-500 */
+        --line: #e5e7eb; /* gray-200 */
+      }
+      html,
+      body {
+        margin: 0;
+        padding: 0;
+        background: #f8fafc;
+        font-family: system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji", "Segoe UI Emoji";
+        color: #0f172a;
+      }
+      .wrap {
+        max-width: 1100px;
+        margin: 28px auto 60px;
+        padding: 0 16px;
+      }
+      h1 {
+        font-size: clamp(20px, 2.2vw, 28px);
+        margin: 0 0 14px;
+        font-weight: 650;
+        letter-spacing: -0.01em;
+      }
+      .card {
+        background: var(--card);
+        border: 1px solid var(--line);
+        border-radius: var(--radius);
+        box-shadow: 0 5px 18px rgba(2, 6, 23, 0.06);
+      }
+      .table-card {
+        padding: 12px;
+      }
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        table-layout: fixed;
+      }
+      thead th {
+        position: sticky;
+        top: 0;
+        background: #f8fafc;
+        z-index: 1;
+      }
+      th,
+      td {
+        border-bottom: 1px solid var(--line);
+        padding: 10px 10px;
+        text-align: left;
+        font-size: 14px;
+        vertical-align: middle;
+      }
+      th:nth-child(1),
+      td:nth-child(1) {
+        width: 20%;
+      }
+      th:nth-child(2),
+      td:nth-child(2) {
+        width: 12%;
+        text-align: center;
+      }
+      th:nth-child(3),
+      td:nth-child(3) {
+        width: 28%;
+      }
+      th:nth-child(4),
+      td:nth-child(4) {
+        width: 13%;
+      }
+      th:nth-child(5),
+      td:nth-child(5) {
+        width: 13%;
+      }
+      th:nth-child(6),
+      td:nth-child(6) {
+        width: 14%;
+      }
+      tbody tr:hover {
+        background: #f9fafb;
+      }
+      .emoji {
+        font-size: 18px;
+      }
+
+      .controls {
+        margin-top: var(--cm);
+      }
+      .row {
+        display: grid;
+        grid-template-columns: 1.2fr 1fr 1.6fr 1.1fr 1.1fr 1.2fr auto;
+        gap: var(--gap);
+        align-items: end;
+      }
+      .row > div {
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+      }
+      label {
+        font-size: 12px;
+        color: var(--muted);
+      }
+      select,
+      input,
+      button {
+        height: 38px;
+        border-radius: 10px;
+        border: 1px solid var(--line);
+        padding: 0 10px;
+        font-size: 14px;
+        background: #fff;
+      }
+      select {
+        padding-right: 28px;
+      }
+      button.primary {
+        background: #111827;
+        color: #fff;
+        border-color: #111827;
+        cursor: pointer;
+      }
+      button.ghost {
+        background: #fff;
+        color: #111827;
+        border-color: var(--line);
+        cursor: pointer;
+      }
+      .tiny {
+        font-size: 12px;
+        color: var(--muted);
+      }
+      .muted {
+        color: var(--muted);
+      }
+      a.story {
+        color: #0ea5e9;
+        text-decoration: none;
+      }
+      a.story:hover {
+        text-decoration: underline;
+      }
+      .topbar {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 12px;
+      }
+      .topbar .rhs {
+        display: flex;
+        gap: 10px;
+        align-items: center;
+      }
+      .tag {
+        font-size: 12px;
+        color: #475569;
+      }
+      .reset {
+        font-size: 12px;
+        color: #ef4444;
+        text-decoration: underline;
+        cursor: pointer;
+      }
+
+      .admin {
+        margin-top: var(--cm);
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 16px;
+      }
+      .form-card {
+        padding: 14px;
+      }
+      .form-grid {
+        display: grid;
+        grid-template-columns: 1fr 1.2fr 0.8fr auto;
+        gap: 10px;
+        align-items: end;
+      }
+      .inline {
+        display: flex;
+        gap: 8px;
+        align-items: end;
+      }
+      ul.list {
+        list-style: none;
+        padding: 0;
+        margin: 10px 0 0;
+      }
+      ul.list li {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        border: 1px solid var(--line);
+        border-radius: 10px;
+        padding: 6px 10px;
+        margin-bottom: 6px;
+        background: #fff;
+      }
+      ul.list li .actions {
+        display: flex;
+        gap: 6px;
+      }
+
+      @media (max-width: 960px) {
+        .row {
+          grid-template-columns: 1fr;
+        }
+        .form-grid {
+          grid-template-columns: 1fr;
+        }
+        th:nth-child(1),
+        td:nth-child(1),
+        th:nth-child(2),
+        td:nth-child(2),
+        th:nth-child(3),
+        td:nth-child(3),
+        th:nth-child(4),
+        td:nth-child(4),
+        th:nth-child(5),
+        td:nth-child(5),
+        th:nth-child(6),
+        td:nth-child(6) {
+          width: auto;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="wrap">
+      <div class="topbar">
+        <h1>Feature Environment Board</h1>
+        <div class="rhs">
+          <span class="tag">Local-only draft • persists to browser</span>
+          <span class="reset" id="resetSeed">Reset sample data</span>
+        </div>
+      </div>
+
+      <!-- TABLE: always shows the 10 environments -->
+      <div class="card table-card">
+        <table id="boardTable" aria-label="Feature Environment Board">
+          <thead>
+            <tr>
+              <th>Environment</th>
+              <th style="text-align: center">Status</th>
+              <th>User Story</th>
+              <th>QA / Tester</th>
+              <th>Developer</th>
+              <th>Changed</th>
+            </tr>
+          </thead>
+          <tbody id="boardBody"></tbody>
+        </table>
+      </div>
+
+      <!-- FORMS: bottom area with three forms -->
+      <div class="admin">
+        <!-- Form 1: Environment update (drives the table above) -->
+        <div class="card form-card">
+          <h3 style="margin: 0 0 8px">Environment update</h3>
+          <form id="envUpdateForm" autocomplete="off">
+            <div style="display: grid; grid-template-columns: 1fr 2.2fr 1fr; gap: 18px 24px; align-items: end; margin-bottom: 0">
+              <div>
+                <label for="env">Environment</label>
+                <select id="env"></select>
+              </div>
+              <div style="grid-column: span 2">
+                <label for="story">User Story</label>
+                <select id="story"></select>
+              </div>
+              <div>
+                <label for="status">Status</label>
+                <select id="status">
+                  <option value="available">🟢 Available</option>
+                  <option value="testing">🟡 Testing</option>
+                  <option value="locked">🔴 Locked Ready for ART Demo</option>
+                  <option value="nextup">🆕 Next-up</option>
+                </select>
+              </div>
+              <div>
+                <label for="qa">QA / Tester</label>
+                <select id="qa"></select>
+              </div>
+              <div>
+                <label for="dev">Developer</label>
+                <select id="dev"></select>
+              </div>
+              <div style="grid-column: 3 / 4; display: flex; justify-content: flex-end; align-items: end; margin-top: 8px">
+                <button class="primary" id="submit" type="button" style="min-width: 120px">Submit</button>
+              </div>
+            </div>
+          </form>
+        </div>
+
+        <!-- Form 2: Story CRUD -->
+        <div class="card form-card">
+          <h3 style="margin: 0 0 8px">Manage User Stories</h3>
+          <div class="form-grid" style="margin-bottom: 8px">
+            <div>
+              <label for="storyTitleIn">Title</label>
+              <input id="storyTitleIn" placeholder="Story title" />
+            </div>
+            <div>
+              <label for="storyUrlIn">Azure DevOps URL (optional)</label>
+              <input id="storyUrlIn" placeholder="https://.../workitems/edit/123456" />
+            </div>
+            <div>
+              <label for="storyIdIn">ID (auto from URL if provided)</label>
+              <input id="storyIdIn" placeholder="e.g., 280305" />
+            </div>
+            <div>
+              <label>&nbsp;</label>
+              <button class="primary" id="storyAddBtn" type="button">Add/Update</button>
+            </div>
+          </div>
+          <ul id="storyList" class="list" aria-label="Stories list"></ul>
+        </div>
+
+        <!-- Form 3: People CRUD -->
+        <div class="card form-card">
+          <h3 style="margin: 0 8px 12px 0">Manage People</h3>
+          <div class="inline" style="margin-bottom: 8px">
+            <div style="flex: 1">
+              <label for="qaAddIn">QA / Tester</label>
+              <div class="inline"><input id="qaAddIn" placeholder="Name" /><button id="qaAddBtn" type="button">Add</button></div>
+            </div>
+            <div style="flex: 1">
+              <label for="devAddIn">Developer</label>
+              <div class="inline"><input id="devAddIn" placeholder="Name" /><button id="devAddBtn" type="button">Add</button></div>
+            </div>
+          </div>
+          <div class="inline" style="gap: 20px">
+            <div style="flex: 1">
+              <strong class="tiny" style="display: block; margin-bottom: 6px">QA / Testers</strong>
+              <ul id="qaList" class="list" aria-label="QA list"></ul>
+            </div>
+            <div style="flex: 1">
+              <strong class="tiny" style="display: block; margin-bottom: 6px">Developers</strong>
+              <ul id="devList" class="list" aria-label="Dev list"></ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      (function () {
+        "use strict";
+        /*** Constants ***/
+        const ENVIRONMENTS = ["Feature 1 BW", "Feature 1 BG", "Feature 2 BW", "Feature 2 BG", "Feature 3 BW", "Feature 3 BG", "Feature 4 BW", "Feature 4 BG", "Demo BW", "Demo BG"];
+        const STATUS = {
+          available: { emoji: "🟢", label: "Available" },
+          testing: { emoji: "🟡", label: "Testing" },
+          locked: { emoji: "🔴", label: "Locked Ready for ART Demo" },
+          nextup: { emoji: "🆕", label: "Next-up" },
+        };
+        const LS_KEY = "feb-embedded-v1";
+        const ZONE = "Africa/Windhoek"; // for the Changed datetime
+        let __TEST_MODE = false; // self-tests skip persistence
+
+        /*** Helpers ***/
+        function truncate(t, n) {
+          return t.length > n ? t.slice(0, n - 1) + "…" : t;
+        }
+        function escapeHtml(s) {
+          return String(s).replace(/[&<>"']/g, (m) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#039;" }[m]));
+        }
+        function nowStamp() {
+          const d = new Date();
+          return d.toLocaleString("en-GB", {
+            day: "2-digit",
+            month: "short",
+            year: "numeric",
+            hour: "2-digit",
+            minute: "2-digit",
+            hour12: false,
+            timeZone: ZONE,
+          });
+        }
+        function save() {
+          if (__TEST_MODE) return;
+          try {
+            localStorage.setItem(LS_KEY, JSON.stringify(state));
+          } catch {}
+        }
+        function load() {
+          try {
+            const j = localStorage.getItem(LS_KEY);
+            if (j) {
+              return JSON.parse(j);
+            }
+          } catch {}
+          return null;
+        }
+
+        function seed() {
+          const stories = [
+            {
+              id: "280305",
+              title: "Payments > International Payments History: Show Transaction Status and POP Download or Send",
+              url: "https://capricorngroupportfolio.visualstudio.com/Digital%20Portfolio/_workitems/edit/280305",
+            },
+            {
+              id: "284166",
+              title: "User Story 284166: BG > WUC Postpaid Water Microservice Implementation",
+              url: "https://capricorngroupportfolio.visualstudio.com/Digital%20Portfolio/_workitems/edit/284166",
+            },
+          ];
+          const rows = {};
+          ENVIRONMENTS.forEach((env) => (rows[env] = { status: "available", storyId: "", qa: "", dev: "", changed: "" }));
+          ["Feature 2 BW", "Feature 2 BG"].forEach((env) => (rows[env] = { status: "testing", storyId: "280305", qa: "Andrew", dev: "Richard", changed: "06 Aug 2025 09:00" }));
+          ["Feature 4 BW", "Feature 4 BG"].forEach((env) => (rows[env] = { status: "testing", storyId: "284166", qa: "Andrew", dev: "Richard", changed: "11 Aug 2025 09:00" }));
+          const qaPeople = ["", "Andrew", "Richard", "Dina", "Sam", "Priya"];
+          const devPeople = ["", "Richard", "Andrew", "Lee", "Marta", "Kurt"];
+          return { rows, stories, qaPeople, devPeople };
+        }
+
+        /*** State ***/
+        let state = load() || seed();
+
+        /*** DOM ***/
+        const boardBody = document.getElementById("boardBody");
+        const envSel = document.getElementById("env");
+        const statusSel = document.getElementById("status");
+        const storySel = document.getElementById("story");
+        const qaSel = document.getElementById("qa");
+        const devSel = document.getElementById("dev");
+        const submitBtn = document.getElementById("submit");
+        const resetSeed = document.getElementById("resetSeed");
+
+        // Story admin DOM
+        const storyTitleIn = document.getElementById("storyTitleIn");
+        const storyUrlIn = document.getElementById("storyUrlIn");
+        const storyIdIn = document.getElementById("storyIdIn");
+        const storyAddBtn = document.getElementById("storyAddBtn");
+        const storyList = document.getElementById("storyList");
+
+        // People admin DOM
+        const qaAddIn = document.getElementById("qaAddIn");
+        const qaAddBtn = document.getElementById("qaAddBtn");
+        const devAddIn = document.getElementById("devAddIn");
+        const devAddBtn = document.getElementById("devAddBtn");
+        const qaList = document.getElementById("qaList");
+        const devList = document.getElementById("devList");
+
+        /*** Select builders ***/
+        function fillEnv() {
+          envSel.innerHTML = ENVIRONMENTS.map((e) => `<option value="${escapeHtml(e)}">${escapeHtml(e)}</option>`).join("");
+        }
+        function fillPeople(select, list) {
+          const options = [
+            '<option value="">— None —</option>',
+            ...list.filter(Boolean).map((n) => `<option value="${escapeHtml(n)}">${escapeHtml(n)}</option>`),
+            '<option value="__add__">➕ Add…</option>',
+            '<option value="__remove__">➖ Remove selected</option>',
+          ];
+          select.innerHTML = options.join("");
+        }
+        function fillStories() {
+          const opts = [
+            '<option value="">— None —</option>',
+            ...state.stories.map((s) => `<option value="${escapeHtml(s.id)}">${escapeHtml(truncate(s.title, 90))}</option>`),
+            '<option value="__add__">➕ Add story…</option>',
+            '<option value="__remove__">➖ Remove selected</option>',
+          ];
+          storySel.innerHTML = opts.join("");
+        }
+
+        /*** Render table ***/
+        function renderTable() {
+          const rowsHtml = ENVIRONMENTS.map((env) => {
+            const r = state.rows[env] || { status: "available", storyId: "", qa: "", dev: "", changed: "" };
+            const st = STATUS[r.status] || STATUS.available;
+            const story = state.stories.find((s) => s.id === r.storyId);
+            const storyHtml = story ? `<a class="story" href="${escapeHtml(story.url)}" target="_blank" rel="noopener">${escapeHtml(story.title)}</a>` : '<span class="muted">—</span>';
+            const qaHtml = r.qa ? escapeHtml(r.qa) : '<span class="muted">—</span>';
+            const devHtml = r.dev ? escapeHtml(r.dev) : '<span class="muted">—</span>';
+            const changedHtml = r.changed ? escapeHtml(r.changed) : '<span class="muted">—</span>';
+            return `<tr>
+        <td>${escapeHtml(env)}</td>
+        <td style="text-align:center"><span class="emoji">${st.emoji}</span></td>
+        <td>${storyHtml}</td>
+        <td>${qaHtml}</td>
+        <td>${devHtml}</td>
+        <td>${changedHtml}</td>
+      </tr>`;
+          }).join("");
+          boardBody.innerHTML = rowsHtml;
+        }
+
+        /*** Add/remove handlers (kept for tests; UI now uses explicit forms) ***/
+        function handlePeopleAddRemove(select, listName) {
+          const v = select.value;
+          if (v === "__add__") {
+            const name = prompt("Add name (e.g., Andrew)");
+            if (name && name.trim()) {
+              const clean = name.trim();
+              if (!state[listName].some((x) => x.toLowerCase() === clean.toLowerCase())) {
+                state[listName].push(clean);
+                save();
+              }
+              fillPeople(select, state[listName]);
+              select.value = clean;
+              select.setAttribute("data-current", clean);
+            } else {
+              select.value = "";
+            }
+          } else if (v === "__remove__") {
+            const current = select.getAttribute("data-current") || "";
+            if (!current) {
+              alert("Select a name first, then choose “Remove selected”.");
+              select.value = "";
+              return;
+            }
+            const idx = state[listName].findIndex((x) => x.toLowerCase() === current.toLowerCase());
+            if (idx > -1 && confirm(`Remove "${state[listName][idx]}" from the dropdown?`)) {
+              state[listName].splice(idx, 1);
+              save();
+            }
+            fillPeople(select, state[listName]);
+            select.value = "";
+            select.setAttribute("data-current", "");
+          } else {
+            select.setAttribute("data-current", v);
+          }
+        }
+
+        function handleStoryAddRemove() {
+          const v = storySel.value;
+          if (v === "__add__") {
+            const url = prompt("Paste Azure DevOps work item URL (optional):");
+            const title = prompt("Story title:");
+            if (!title || !title.trim()) {
+              storySel.value = "";
+              return;
+            }
+            const idMatch = url ? url.match(/\/edit\/(\d+)/) : null;
+            const id = idMatch ? idMatch[1] : String(Date.now());
+            if (!state.stories.some((s) => s.id === id)) {
+              state.stories.push({ id, title: title.trim(), url: (url || "").trim() });
+              save();
+            }
+            fillStories();
+            storySel.value = id;
+            storySel.setAttribute("data-current", id);
+          } else if (v === "__remove__") {
+            const curId = storySel.getAttribute("data-current");
+            if (!curId) {
+              alert("Select a story first, then choose “Remove selected story”.");
+              storySel.value = "";
+              return;
+            }
+            const idx = state.stories.findIndex((s) => s.id === curId);
+            if (idx > -1 && confirm(`Remove story "${state.stories[idx].title}" from the dropdown?`)) {
+              state.stories.splice(idx, 1);
+              save();
+            }
+            fillStories();
+            storySel.value = "";
+            storySel.setAttribute("data-current", "");
+          } else {
+            storySel.setAttribute("data-current", v);
+          }
+        }
+
+        /*** Admin form logic ***/
+        function storyIdFromUrl(url) {
+          const m = (url || "").match(/\/edit\/(\d+)/);
+          return m ? m[1] : "";
+        }
+        function upsertStoryFromForm() {
+          let id = (storyIdIn.value || "").trim();
+          const url = (storyUrlIn.value || "").trim();
+          const title = (storyTitleIn.value || "").trim();
+          if (!title) {
+            alert("Title is required.");
+            return;
+          }
+          if (!id) id = storyIdFromUrl(url) || String(Date.now());
+          const i = state.stories.findIndex((s) => s.id === id);
+          const rec = { id, title, url };
+          if (i >= 0) state.stories[i] = rec;
+          else state.stories.push(rec);
+          save();
+          fillStories();
+          renderStoryAdminList();
+          renderTable();
+          storyIdIn.value = storyUrlIn.value = storyTitleIn.value = "";
+        }
+        function removeStoryById(id) {
+          const i = state.stories.findIndex((s) => s.id === id);
+          if (i > -1) {
+            state.stories.splice(i, 1);
+            save();
+            fillStories();
+            renderStoryAdminList();
+            renderTable();
+          }
+        }
+
+        function addNameTo(listName, inputEl) {
+          const name = (inputEl.value || "").trim();
+          if (!name) {
+            alert("Name is required.");
+            return;
+          }
+          if (!state[listName].some((x) => x.toLowerCase() === name.toLowerCase())) state[listName].push(name);
+          save();
+          fillPeople(qaSel, state.qaPeople);
+          fillPeople(devSel, state.devPeople);
+          renderPeopleAdminLists();
+          renderTable();
+          inputEl.value = "";
+        }
+        function removeNameFrom(listName, name) {
+          const idx = state[listName].findIndex((x) => x.toLowerCase() === name.toLowerCase());
+          if (idx > -1) {
+            state[listName].splice(idx, 1);
+            save();
+          }
+          fillPeople(qaSel, state.qaPeople);
+          fillPeople(devSel, state.devPeople);
+          renderPeopleAdminLists();
+          renderTable();
+        }
+
+        /*** Render admin lists ***/
+        function renderStoryAdminList() {
+          storyList.innerHTML = state.stories
+            .map(
+              (s) => `<li>
+      <div style="flex:1; min-width:0">
+        <div style="font-weight:600; white-space:nowrap; overflow:hidden; text-overflow:ellipsis">${escapeHtml(s.title)}</div>
+        <div class="tiny">ID: ${escapeHtml(s.id)} ${s.url ? "• " + escapeHtml(s.url) : ""}</div>
+      </div>
+      <div class="actions">
+        <button class="ghost" data-act="edit" data-id="${escapeHtml(s.id)}">Edit</button>
+        <button class="ghost" data-act="del" data-id="${escapeHtml(s.id)}">Delete</button>
+      </div>
+    </li>`
+            )
+            .join("");
+        }
+        storyList.addEventListener("click", (e) => {
+          const btn = e.target.closest("button");
+          if (!btn) return;
+          const id = btn.getAttribute("data-id");
+          const act = btn.getAttribute("data-act");
+          const s = state.stories.find((x) => x.id === id);
+          if (!s) return;
+          if (act === "edit") {
+            storyIdIn.value = s.id;
+            storyTitleIn.value = s.title;
+            storyUrlIn.value = s.url || "";
+          } else if (act === "del") {
+            if (confirm(`Delete story "${s.title}"?`)) removeStoryById(id);
+          }
+        });
+
+        function renderPeopleAdminLists() {
+          qaList.innerHTML = state.qaPeople
+            .filter(Boolean)
+            .map((n) => `<li><span>${escapeHtml(n)}</span><div class="actions"><button class="ghost" data-n="${escapeHtml(n)}" data-list="qaPeople">Delete</button></div></li>`)
+            .join("");
+          devList.innerHTML = state.devPeople
+            .filter(Boolean)
+            .map((n) => `<li><span>${escapeHtml(n)}</span><div class="actions"><button class="ghost" data-n="${escapeHtml(n)}" data-list="devPeople">Delete</button></div></li>`)
+            .join("");
+        }
+        qaList.addEventListener("click", (e) => {
+          const b = e.target.closest("button");
+          if (!b) return;
+          const name = b.getAttribute("data-n");
+          if (confirm(`Delete ${name}?`)) removeNameFrom("qaPeople", name);
+        });
+        devList.addEventListener("click", (e) => {
+          const b = e.target.closest("button");
+          if (!b) return;
+          const name = b.getAttribute("data-n");
+          if (confirm(`Delete ${name}?`)) removeNameFrom("devPeople", name);
+        });
+
+        /*** Submit ***/
+        submitBtn.addEventListener("click", function () {
+          const env = envSel.value;
+          const st = statusSel.value || "available";
+          let storyId = storySel.value;
+          if (storyId.startsWith("__")) storyId = "";
+          let qa = qaSel.value;
+          if (qa.startsWith("__")) qa = "";
+          let dev = devSel.value;
+          if (dev.startsWith("__")) dev = "";
+
+          const row = state.rows[env] || { status: "available", storyId: "", qa: "", dev: "", changed: "" };
+          row.status = st;
+          row.storyId = storyId;
+          row.qa = qa;
+          row.dev = dev;
+          row.changed = nowStamp();
+          state.rows[env] = row;
+          save();
+          renderTable();
+
+          if (storyId) storySel.setAttribute("data-current", storyId);
+          if (qa) qaSel.setAttribute("data-current", qa);
+          if (dev) devSel.setAttribute("data-current", dev);
+        });
+
+        /*** Change listeners (legacy add/remove still supported) ***/
+        storySel.addEventListener("change", function () {
+          const v = storySel.value;
+          if (v === "__add__" || v === "__remove__") return handleStoryAddRemove();
+          storySel.setAttribute("data-current", v);
+        });
+        qaSel.addEventListener("change", function () {
+          const v = qaSel.value;
+          if (v === "__add__" || v === "__remove__") return handlePeopleAddRemove(qaSel, "qaPeople");
+          qaSel.setAttribute("data-current", v);
+        });
+        devSel.addEventListener("change", function () {
+          const v = devSel.value;
+          if (v === "__add__" || v === "__remove__") return handlePeopleAddRemove(devSel, "devPeople");
+          devSel.setAttribute("data-current", v);
+        });
+
+        /*** Admin buttons ***/
+        storyAddBtn.addEventListener("click", upsertStoryFromForm);
+        qaAddBtn.addEventListener("click", () => addNameTo("qaPeople", qaAddIn));
+        devAddBtn.addEventListener("click", () => addNameTo("devPeople", devAddIn));
+
+        /*** Reset seed ***/
+        resetSeed.addEventListener("click", () => {
+          if (confirm("Reset to sample data? This will clear your current board in this browser.")) {
+            state = seed();
+            save();
+            fillEnv();
+            fillStories();
+            fillPeople(qaSel, state.qaPeople);
+            fillPeople(devSel, state.devPeople);
+            renderTable();
+            renderStoryAdminList();
+            renderPeopleAdminLists();
+            storySel.setAttribute("data-current", "");
+            qaSel.setAttribute("data-current", "");
+            devSel.setAttribute("data-current", "");
+          }
+        });
+
+        /*** Initial render ***/
+        fillEnv();
+        fillStories();
+        fillPeople(qaSel, state.qaPeople);
+        fillPeople(devSel, state.devPeople);
+        renderTable();
+        renderStoryAdminList();
+        renderPeopleAdminLists();
+        storySel.setAttribute("data-current", "");
+        qaSel.setAttribute("data-current", "");
+        devSel.setAttribute("data-current", "");
+
+        /*** Self-tests (console) — keep existing, add more for new forms ***/
+        function runTests() {
+          try {
+            __TEST_MODE = true;
+            const origState = state;
+            const clone = JSON.parse(JSON.stringify(state));
+            state = clone;
+
+            // Existing tests
+            console.assert(escapeHtml("<b>") === "&lt;b&gt;", "escapeHtml should escape < and >");
+            console.assert(truncate("abcdefghij", 5) === "abcd…", "truncate should add ellipsis");
+
+            const sel = document.createElement("select");
+            fillPeople(sel, state.qaPeople);
+            const oldPrompt = window.prompt;
+            const oldConfirm = window.confirm;
+            window.prompt = () => "Zed";
+            window.confirm = () => true;
+            sel.value = "__add__";
+            handlePeopleAddRemove(sel, "qaPeople");
+            console.assert(state.qaPeople.map((x) => x.toLowerCase()).includes("zed"), "person should be added");
+            sel.setAttribute("data-current", "Zed");
+            sel.value = "__remove__";
+            handlePeopleAddRemove(sel, "qaPeople");
+            console.assert(!state.qaPeople.map((x) => x.toLowerCase()).includes("zed"), "person should be removed");
+            window.prompt = oldPrompt;
+            window.confirm = oldConfirm;
+
+            renderTable();
+            console.assert(!boardBody.innerHTML.includes("&lt;span"), "placeholders should render, not be escaped");
+
+            // Added tests
+            // Story admin add/update/remove
+            storyTitleIn.value = "A new story";
+            storyUrlIn.value = "https://example.com/workitems/edit/999999";
+            storyIdIn.value = "";
+            upsertStoryFromForm();
+            console.assert(
+              state.stories.some((s) => s.id === "999999"),
+              "story should be added via admin form"
+            );
+            storyTitleIn.value = "A newer title";
+            storyIdIn.value = "999999";
+            storyUrlIn.value = "https://example.com/workitems/edit/999999";
+            upsertStoryFromForm();
+            console.assert(state.stories.find((s) => s.id === "999999").title === "A newer title", "story should be updated via admin form");
+            removeStoryById("999999");
+            console.assert(!state.stories.some((s) => s.id === "999999"), "story should be removed via admin function");
+
+            // People admin add/remove
+            qaAddIn.value = "QA X";
+            addNameTo("qaPeople", qaAddIn);
+            console.assert(state.qaPeople.includes("QA X"), "QA should be added via admin form");
+            removeNameFrom("qaPeople", "QA X");
+            console.assert(!state.qaPeople.includes("QA X"), "QA should be removed via admin function");
+
+            // Submit updates row
+            envSel.value = ENVIRONMENTS[0];
+            statusSel.value = "testing";
+            qaSel.value = "";
+            devSel.value = "";
+            storySel.value = "";
+            submitBtn.click();
+            console.assert(state.rows[ENVIRONMENTS[0]].status === "testing", "submit should set status");
+            console.assert(state.rows[ENVIRONMENTS[0]].changed.length > 0, "submit should stamp changed datetime");
+
+            state = origState;
+            __TEST_MODE = false;
+            renderTable();
+            console.log("[FEB] Self-tests passed");
+          } catch (e) {
+            try {
+              __TEST_MODE = false;
+              renderTable();
+            } catch {}
+            console.warn("[FEB] Self-tests failed", e);
+          }
+        }
+
+        runTests();
+      })();
+    </script>
+  </body>
+</html>
