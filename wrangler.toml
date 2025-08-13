@@ -1,9 +1,14 @@
-name = "feature-runway"
-main = "functions/page-data.js"
-compatibility_date = "2025-08-13"
-
-[[durable_objects.bindings]]
-name = "PAGE_DATA"
-class_name = "PageDataDO"
-
 pages_build_output_dir = "."
+
+name = "feature-runway"
+compatibility_date = "2025-08-13"
+pages_build_output_dir = "."
+
+[durable_objects]
+bindings = [
+	{ name = "PAGE_DATA", class_name = "PageDataDO" }
+]
+
+[[migrations]]
+tag = "v1"
+new_classes = ["PageDataDO"]
