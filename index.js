@@ -40,6 +40,7 @@ function showAlert(message) {
 function showConfirm(message, onConfirm) {
   showModal(message, { confirm: true, onConfirm });
 }
+
 (function () {
         'use strict';
         /*** Constants ***/
@@ -99,6 +100,37 @@ function showConfirm(message, onConfirm) {
             (m) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#039;' }[m])
           );
         }
+
+        async function copyText(text) {
+          try {
+            if (navigator.clipboard && window.isSecureContext) {
+              await navigator.clipboard.writeText(text);
+              return true;
+            }
+          } catch {}
+          // Fallback: temporary textarea + execCommand
+          try {
+            const ta = document.createElement('textarea');
+            ta.value = text;
+            ta.setAttribute('readonly', '');
+            ta.style.position = 'fixed';
+            ta.style.opacity = '0';
+            document.body.appendChild(ta);
+            ta.select();
+            const ok = document.execCommand && document.execCommand('copy');
+            document.body.removeChild(ta);
+            return !!ok;
+          } catch {
+            return false;
+          }
+        }
+
+        // Build absolute URL from a link element
+        function absoluteHref(a) {
+          try { return new URL(a.getAttribute('href'), window.location.href).href; }
+          catch { return a.href || a.getAttribute('href'); }
+        }
+
         function nowStamp() {
           const d = new Date();
           return d.toLocaleString('en-GB', {
@@ -199,7 +231,7 @@ function showConfirm(message, onConfirm) {
             const st = STATUS[r.status] || STATUS.available;
             const story = state.stories.find((s) => s.id === r.storyId);
             const storyHtml = story
-              ? `<a class="story" href="${escapeHtml(
+              ? `<a class="story copy-link" href="${escapeHtml(
                   story.url
                 )}" target="_blank" rel="noopener">${escapeHtml(story.title)}</a>`
               : '<span class="muted">—</span>';
@@ -207,7 +239,7 @@ function showConfirm(message, onConfirm) {
             const devHtml = r.dev ? escapeHtml(r.dev) : '<span class="muted">—</span>';
             const changedHtml = r.changed ? escapeHtml(r.changed) : '<span class="muted">—</span>';
             const envHtml = envUrl
-              ? `<a href="${escapeHtml(envUrl)}" target="_blank" rel="noopener">${escapeHtml(
+              ? `<a class="copy-link" href="${escapeHtml(envUrl)}" target="_blank" rel="noopener">${escapeHtml(
                   env
                 )} <span title=\"Open environment\"></span></a>`
               : escapeHtml(env);
@@ -223,6 +255,26 @@ function showConfirm(message, onConfirm) {
       </tr>`;
           }).join('');
           boardBody.innerHTML = rowsHtml;
+
+          const COPY_SELECTOR = 'a[data-copy-link], a.copy-link';
+
+          // Single delegated listener handles current + future links
+          document.addEventListener('click', async (e) => {
+            const a = e.target.closest(COPY_SELECTOR);
+            if (!a) return;
+
+            // Let modified clicks fall through if you prefer (Ctrl/Cmd/Shift).
+            // In an Azure DevOps iframe they won't open a new tab anyway, so we intercept.
+            e.preventDefault();
+
+            const url = absoluteHref(a);
+            const ok = await copyText(url);
+            if (ok) {
+              showAlert('Link copied. Paste it into a new tab (Ctrl/Cmd+L, paste, Enter).');
+            } else {
+              showAlert('Copy this link, then paste it into a new tab:<br /><br />' + url);
+            }
+          });
         }
 
         /*** Add/remove handlers (kept for tests; UI now uses explicit forms) ***/
