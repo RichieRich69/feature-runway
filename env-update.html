@@ -1,37 +1,51 @@
-<div class="card form-card">
-  <h3 class="mb-8">Environment update</h3>
-  <form id="envUpdateForm" autocomplete="off">
-    <div class="env-form-grid">
-      <div>
-        <label for="env">Environment</label>
-        <select id="env"></select>
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Feature Environment update</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <div class="wrap">
+      <div class="card form-card">
+        <h3 class="mb-8">Feature Environment update</h3>
+        <form id="envUpdateForm" autocomplete="off">
+          <div class="row">
+            <div>
+              <label for="env">Environment</label>
+              <select id="env"></select>
+            </div>
+            <div class="span-2">
+              <label for="story">User Story</label>
+              <select id="story"></select>
+            </div>
+          </div>
+          <div class="row">
+            <div>
+              <label for="status">Status</label>
+              <select id="status">
+                <option value="available">🟢 Available</option>
+                <option value="testing">🟡 Testing</option>
+                <option value="locked">🔴 Locked Ready for ART Demo</option>
+                <option value="nextup">🆕 Next-up</option>
+              </select>
+            </div>
+            <div>
+              <label for="qa">QA / Tester</label>
+              <select id="qa"></select>
+            </div>
+            <div>
+              <label for="dev">Developer</label>
+              <select id="dev"></select>
+            </div>
+            <div class="env-submit">
+              <button class="primary minw-120" id="submit" type="button">Submit</button>
+            </div>
+          </div>
+        </form>
       </div>
-      <div class="span-2">
-        <label for="story">User Story</label>
-        <select id="story"></select>
-      </div>
-      <div>
-        <label for="status">Status</label>
-        <select id="status">
-          <option value="available">🟢 Available</option>
-          <option value="testing">🟡 Testing</option>
-          <option value="locked">🔴 Locked Ready for ART Demo</option>
-          <option value="nextup">🆕 Next-up</option>
-        </select>
-      </div>
-      <div>
-        <label for="qa">QA / Tester</label>
-        <select id="qa"></select>
-      </div>
-      <div>
-        <label for="dev">Developer</label>
-        <select id="dev"></select>
-      </div>
-      <div class="env-submit">
-        <button class="primary minw-120" id="submit" type="button">Submit</button>
-      </div>
+      <script src="env-update.js"></script>
     </div>
-  </form>
-</div>
-</div>
-<script src="env-update.js"></script>
+  </body>
+</html>

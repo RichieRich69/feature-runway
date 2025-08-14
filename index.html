@@ -4,244 +4,17 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Feature Environment Board</title>
-    <style>
-      :root {
-        --cm: 38px; /* ~1cm on most displays */
-        --gap: 12px;
-        --radius: 14px;
-        --card: #ffffff;
-        --muted: #6b7280; /* slate-500 */
-        --line: #e5e7eb; /* gray-200 */
-      }
-      html,
-      body {
-        margin: 0;
-        padding: 0;
-        background: #f8fafc;
-        font-family: system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji", "Segoe UI Emoji";
-        color: #0f172a;
-      }
-      .wrap {
-        max-width: 1100px;
-        margin: 28px auto 60px;
-        padding: 0 16px;
-      }
-      h1 {
-        font-size: clamp(20px, 2.2vw, 28px);
-        margin: 0 0 14px;
-        font-weight: 650;
-        letter-spacing: -0.01em;
-      }
-      .card {
-        background: var(--card);
-        border: 1px solid var(--line);
-        border-radius: var(--radius);
-        box-shadow: 0 5px 18px rgba(2, 6, 23, 0.06);
-      }
-      .table-card {
-        padding: 12px;
-      }
-      table {
-        width: 100%;
-        border-collapse: collapse;
-        table-layout: fixed;
-      }
-      thead th {
-        position: sticky;
-        top: 0;
-        background: #f8fafc;
-        z-index: 1;
-      }
-      th,
-      td {
-        border-bottom: 1px solid var(--line);
-        padding: 10px 10px;
-        text-align: left;
-        font-size: 14px;
-        vertical-align: middle;
-      }
-      th:nth-child(1),
-      td:nth-child(1) {
-        width: 20%;
-      }
-      th:nth-child(2),
-      td:nth-child(2) {
-        width: 12%;
-        text-align: center;
-      }
-      th:nth-child(3),
-      td:nth-child(3) {
-        width: 28%;
-      }
-      th:nth-child(4),
-      td:nth-child(4) {
-        width: 13%;
-      }
-      th:nth-child(5),
-      td:nth-child(5) {
-        width: 13%;
-      }
-      th:nth-child(6),
-      td:nth-child(6) {
-        width: 14%;
-      }
-      tbody tr:hover {
-        background: #f9fafb;
-      }
-      .emoji {
-        font-size: 18px;
-      }
-
-      .controls {
-        margin-top: var(--cm);
-      }
-      .row {
-        display: grid;
-        grid-template-columns: 1.2fr 1fr 1.6fr 1.1fr 1.1fr 1.2fr auto;
-        gap: var(--gap);
-        align-items: end;
-      }
-      .row > div {
-        display: flex;
-        flex-direction: column;
-        gap: 6px;
-      }
-      label {
-        font-size: 12px;
-        color: var(--muted);
-      }
-      select,
-      input,
-      button {
-        height: 38px;
-        border-radius: 10px;
-        border: 1px solid var(--line);
-        padding: 0 10px;
-        font-size: 14px;
-        background: #fff;
-      }
-      select {
-        padding-right: 28px;
-      }
-      button.primary {
-        background: #111827;
-        color: #fff;
-        border-color: #111827;
-        cursor: pointer;
-      }
-      button.ghost {
-        background: #fff;
-        color: #111827;
-        border-color: var(--line);
-        cursor: pointer;
-      }
-      .tiny {
-        font-size: 12px;
-        color: var(--muted);
-      }
-      .muted {
-        color: var(--muted);
-      }
-      a.story {
-        color: #0ea5e9;
-        text-decoration: none;
-      }
-      a.story:hover {
-        text-decoration: underline;
-      }
-      .topbar {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        margin-bottom: 12px;
-      }
-      .topbar .rhs {
-        display: flex;
-        gap: 10px;
-        align-items: center;
-      }
-      .tag {
-        font-size: 12px;
-        color: #475569;
-      }
-      .reset {
-        font-size: 12px;
-        color: #ef4444;
-        text-decoration: underline;
-        cursor: pointer;
-      }
-
-      .admin {
-        margin-top: var(--cm);
-        display: grid;
-        grid-template-columns: 1fr;
-        gap: 16px;
-      }
-      .form-card {
-        padding: 14px;
-      }
-      .form-grid {
-        display: grid;
-        grid-template-columns: 1fr 1.2fr 0.8fr auto;
-        gap: 10px;
-        align-items: end;
-      }
-      .inline {
-        display: flex;
-        gap: 8px;
-        align-items: end;
-      }
-      ul.list {
-        list-style: none;
-        padding: 0;
-        margin: 10px 0 0;
-      }
-      ul.list li {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        border: 1px solid var(--line);
-        border-radius: 10px;
-        padding: 6px 10px;
-        margin-bottom: 6px;
-        background: #fff;
-      }
-      ul.list li .actions {
-        display: flex;
-        gap: 6px;
-      }
-
-      @media (max-width: 960px) {
-        .row {
-          grid-template-columns: 1fr;
-        }
-        .form-grid {
-          grid-template-columns: 1fr;
-        }
-        th:nth-child(1),
-        td:nth-child(1),
-        th:nth-child(2),
-        td:nth-child(2),
-        th:nth-child(3),
-        td:nth-child(3),
-        th:nth-child(4),
-        td:nth-child(4),
-        th:nth-child(5),
-        td:nth-child(5),
-        th:nth-child(6),
-        td:nth-child(6) {
-          width: auto;
-        }
-      }
-    </style>
+    <link rel="stylesheet" href="style.css" />
   </head>
   <body>
     <div class="wrap">
       <div class="topbar">
         <h1>Retail Feature Environment Runway</h1>
         <div class="rhs">
-          <a href="env-update.html" class="edit-link">Edit Table</a>
-          <a href="edit.html" class="edit-link">Edit Stories & People</a>
+          <a href="env-update.html" class="edit-link" target="_blank" rel="noopener">Edit Table</a>
+          <a href="edit.html" class="edit-link" target="_blank" rel="noopener"
+            >Edit Stories & People</a
+          >
         </div>
       </div>
 
@@ -261,55 +34,76 @@
           <tbody id="boardBody"></tbody>
         </table>
       </div>
-
-      <!-- FORMS: bottom area with three forms -->
-      <div class="admin">
-        <!-- Environment update form extracted -->
-        <!--#include file="env-update.html" -->
-      </div>
     </div>
 
     <script>
       (function () {
-        "use strict";
+        'use strict';
         /*** Constants ***/
         const ENVIRONMENTS = [
-          { name: "Feature 1 BW", url: "https://capricornro-retail-feature1-bw.azurewebsites.net/home" },
-          { name: "Feature 1 BG", url: "https://capricornro-retail-feature1.azurewebsites.net/home" },
-          { name: "Feature 2 BW", url: "https://capricornro-retail-feature2-bw.azurewebsites.net/home" },
-          { name: "Feature 2 BG", url: "https://capricornro-retail-feature2.azurewebsites.net/home" },
-          { name: "Feature 3 BW", url: "https://capricornro-retail-feature3-bw.azurewebsites.net/home" },
-          { name: "Feature 3 BG", url: "https://capricornro-retail-feature3.azurewebsites.net/home" },
-          { name: "Feature 4 BW", url: "https://capricornro-retail-feature4-bw.azurewebsites.net/home" },
-          { name: "Feature 4 BG", url: "https://capricornro-retail-feature4.azurewebsites.net/home" },
-          { name: "Demo BW", url: "https://capricornro-retail-demo-bw.azurewebsites.net/home" },
-          { name: "Demo BG", url: "https://capricornro-retail-demo-bg.azurewebsites.net/home" },
+          {
+            name: 'Feature 1 BW',
+            url: 'https://capricornro-retail-feature1-bw.azurewebsites.net/home',
+          },
+          {
+            name: 'Feature 1 BG',
+            url: 'https://capricornro-retail-feature1.azurewebsites.net/home',
+          },
+          {
+            name: 'Feature 2 BW',
+            url: 'https://capricornro-retail-feature2-bw.azurewebsites.net/home',
+          },
+          {
+            name: 'Feature 2 BG',
+            url: 'https://capricornro-retail-feature2.azurewebsites.net/home',
+          },
+          {
+            name: 'Feature 3 BW',
+            url: 'https://capricornro-retail-feature3-bw.azurewebsites.net/home',
+          },
+          {
+            name: 'Feature 3 BG',
+            url: 'https://capricornro-retail-feature3.azurewebsites.net/home',
+          },
+          {
+            name: 'Feature 4 BW',
+            url: 'https://capricornro-retail-feature4-bw.azurewebsites.net/home',
+          },
+          {
+            name: 'Feature 4 BG',
+            url: 'https://capricornro-retail-feature4.azurewebsites.net/home',
+          },
+          { name: 'Demo BW', url: 'https://capricornro-retail-demo-bw.azurewebsites.net/home' },
+          { name: 'Demo BG', url: 'https://capricornro-retail-demo-bg.azurewebsites.net/home' },
         ];
         const STATUS = {
-          available: { emoji: "🟢", label: "Available" },
-          testing: { emoji: "🟡", label: "Testing" },
-          locked: { emoji: "🔴", label: "Locked Ready for ART Demo" },
-          nextup: { emoji: "🆕", label: "Next-up" },
+          available: { emoji: '🟢', label: 'Available' },
+          testing: { emoji: '🟡', label: 'Testing' },
+          locked: { emoji: '🔴', label: 'Locked Ready for ART Demo' },
+          nextup: { emoji: '🆕', label: 'Next-up' },
         };
-        const LS_KEY = "feb-embedded-v1";
-        const ZONE = "Africa/Windhoek"; // for the Changed datetime
+        const LS_KEY = 'feb-embedded-v1';
+        const ZONE = 'Africa/Windhoek'; // for the Changed datetime
         let __TEST_MODE = false; // self-tests skip persistence
 
         /*** Helpers ***/
         function truncate(t, n) {
-          return t.length > n ? t.slice(0, n - 1) + "…" : t;
+          return t.length > n ? t.slice(0, n - 1) + '…' : t;
         }
         function escapeHtml(s) {
-          return String(s).replace(/[&<>"']/g, (m) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#039;" }[m]));
+          return String(s).replace(
+            /[&<>"']/g,
+            (m) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#039;' }[m])
+          );
         }
         function nowStamp() {
           const d = new Date();
-          return d.toLocaleString("en-GB", {
-            day: "2-digit",
-            month: "short",
-            year: "numeric",
-            hour: "2-digit",
-            minute: "2-digit",
+          return d.toLocaleString('en-GB', {
+            day: '2-digit',
+            month: 'short',
+            year: 'numeric',
+            hour: '2-digit',
+            minute: '2-digit',
             hour12: false,
             timeZone: ZONE,
           });
@@ -318,48 +112,38 @@
         async function save() {
           if (__TEST_MODE) return;
           try {
-            await fetch("/api/page-data", {
-              method: "POST",
-              headers: { "Content-Type": "application/json" },
+            await fetch('/api/page-data', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
               body: JSON.stringify({ data: state }),
             });
           } catch (e) {
-            console.warn("Failed to save to server", e);
+            console.warn('Failed to save to server', e);
           }
         }
 
         async function load() {
           try {
-            const res = await fetch("/api/page-data");
+            const res = await fetch('/api/page-data');
             if (res.ok) {
               const json = await res.json();
               return json.data;
             }
           } catch (e) {
-            console.warn("Failed to load from server", e);
+            console.warn('Failed to load from server', e);
           }
           return null;
         }
 
         function seed() {
-          const stories = [
-            {
-              id: "280305",
-              title: "Payments > International Payments History: Show Transaction Status and POP Download or Send",
-              url: "https://capricorngroupportfolio.visualstudio.com/Digital%20Portfolio/_workitems/edit/280305",
-            },
-            {
-              id: "284166",
-              title: "User Story 284166: BG > WUC Postpaid Water Microservice Implementation",
-              url: "https://capricorngroupportfolio.visualstudio.com/Digital%20Portfolio/_workitems/edit/284166",
-            },
-          ];
+          const stories = [];
           const rows = {};
-          ENVIRONMENTS.forEach((env) => (rows[env] = { status: "available", storyId: "", qa: "", dev: "", changed: "" }));
-          ["Feature 2 BW", "Feature 2 BG"].forEach((env) => (rows[env] = { status: "testing", storyId: "280305", qa: "Andrew", dev: "Richard", changed: "06 Aug 2025 09:00" }));
-          ["Feature 4 BW", "Feature 4 BG"].forEach((env) => (rows[env] = { status: "testing", storyId: "284166", qa: "Andrew", dev: "Richard", changed: "11 Aug 2025 09:00" }));
-          const qaPeople = ["", "Andrew", "Richard", "Dina", "Sam", "Priya"];
-          const devPeople = ["", "Richard", "Andrew", "Lee", "Marta", "Kurt"];
+          ENVIRONMENTS.forEach(
+            (env) =>
+              (rows[env] = { status: 'available', storyId: '', qa: '', dev: '', changed: '' })
+          );
+          const qaPeople = [];
+          const devPeople = [];
           return { rows, stories, qaPeople, devPeople };
         }
 
@@ -369,86 +153,80 @@
           state = await load();
           if (!state) state = seed();
           // After state is loaded, continue initializing UI
-          fillEnv();
-          fillStories();
-          fillPeople(qaSel, state.qaPeople);
-          fillPeople(devSel, state.devPeople);
           renderTable();
-          renderStoryAdminList();
-          renderPeopleAdminLists();
-          storySel.setAttribute("data-current", "");
-          qaSel.setAttribute("data-current", "");
-          devSel.setAttribute("data-current", "");
         })();
 
         /*** DOM ***/
-        const boardBody = document.getElementById("boardBody");
-        const envSel = document.getElementById("env");
-        const statusSel = document.getElementById("status");
-        const storySel = document.getElementById("story");
-        const qaSel = document.getElementById("qa");
-        const devSel = document.getElementById("dev");
-        const submitBtn = document.getElementById("submit");
-        const resetSeed = document.getElementById("resetSeed");
+        const boardBody = document.getElementById('boardBody');
+        const envSel = document.getElementById('env');
+        const statusSel = document.getElementById('status');
+        const storySel = document.getElementById('story');
+        const qaSel = document.getElementById('qa');
+        const devSel = document.getElementById('dev');
+        const submitBtn = document.getElementById('submit');
+        const resetSeed = document.getElementById('resetSeed');
 
         // Story admin DOM
-        const storyTitleIn = document.getElementById("storyTitleIn");
-        const storyUrlIn = document.getElementById("storyUrlIn");
-        const storyIdIn = document.getElementById("storyIdIn");
-        const storyAddBtn = document.getElementById("storyAddBtn");
-        const storyList = document.getElementById("storyList");
+        const storyTitleIn = document.getElementById('storyTitleIn');
+        const storyUrlIn = document.getElementById('storyUrlIn');
+        const storyIdIn = document.getElementById('storyIdIn');
+        const storyAddBtn = document.getElementById('storyAddBtn');
+        const storyList = document.getElementById('storyList');
 
         // People admin DOM
-        const qaAddIn = document.getElementById("qaAddIn");
-        const qaAddBtn = document.getElementById("qaAddBtn");
-        const devAddIn = document.getElementById("devAddIn");
-        const devAddBtn = document.getElementById("devAddBtn");
-        const qaList = document.getElementById("qaList");
-        const devList = document.getElementById("devList");
-
-        /*** Select builders ***/
-        function fillEnv() {
-          envSel.innerHTML = ENVIRONMENTS.map((e) => `<option value="${escapeHtml(e.name)}">${escapeHtml(e.name)}</option>`).join("");
-        }
-        function fillPeople(select, list) {
-          const options = ['<option value="">— None —</option>', ...list.filter(Boolean).map((n) => `<option value="${escapeHtml(n)}">${escapeHtml(n)}</option>`)];
-          select.innerHTML = options.join("");
-        }
-        function fillStories() {
-          const opts = ['<option value="">— None —</option>', ...state.stories.map((s) => `<option value="${escapeHtml(s.id)}">${escapeHtml(truncate(s.title, 90))}</option>`)];
-          storySel.innerHTML = opts.join("");
-        }
+        const qaAddIn = document.getElementById('qaAddIn');
+        const qaAddBtn = document.getElementById('qaAddBtn');
+        const devAddIn = document.getElementById('devAddIn');
+        const devAddBtn = document.getElementById('devAddBtn');
+        const qaList = document.getElementById('qaList');
+        const devList = document.getElementById('devList');
 
         /*** Render table ***/
         function renderTable() {
           const rowsHtml = ENVIRONMENTS.map((envObj) => {
             const env = envObj.name;
             const envUrl = envObj.url;
-            const r = state.rows[env] || { status: "available", storyId: "", qa: "", dev: "", changed: "" };
+            const r = state.rows[env] || {
+              status: 'available',
+              storyId: '',
+              qa: '',
+              dev: '',
+              changed: '',
+            };
             const st = STATUS[r.status] || STATUS.available;
             const story = state.stories.find((s) => s.id === r.storyId);
-            const storyHtml = story ? `<a class="story" href="${escapeHtml(story.url)}" target="_blank" rel="noopener">${escapeHtml(story.title)}</a>` : '<span class="muted">—</span>';
+            const storyHtml = story
+              ? `<a class="story" href="${escapeHtml(
+                  story.url
+                )}" target="_blank" rel="noopener">${escapeHtml(story.title)}</a>`
+              : '<span class="muted">—</span>';
             const qaHtml = r.qa ? escapeHtml(r.qa) : '<span class="muted">—</span>';
             const devHtml = r.dev ? escapeHtml(r.dev) : '<span class="muted">—</span>';
             const changedHtml = r.changed ? escapeHtml(r.changed) : '<span class="muted">—</span>';
-            const envHtml = envUrl ? `<a href="${escapeHtml(envUrl)}" target="_blank" rel="noopener">${escapeHtml(env)} <span title=\"Open environment\"></span></a>` : escapeHtml(env);
+            const envHtml = envUrl
+              ? `<a href="${escapeHtml(envUrl)}" target="_blank" rel="noopener">${escapeHtml(
+                  env
+                )} <span title=\"Open environment\"></span></a>`
+              : escapeHtml(env);
             return `<tr>
         <td>${envHtml}</td>
-        <td style="text-align:center"><span class="emoji">${st.emoji}</span> <span>${escapeHtml(st.label)}</span></td>
+        <td style="text-align:center"><span class="emoji">${st.emoji}</span> <span>${escapeHtml(
+              st.label
+            )}</span></td>
         <td>${storyHtml}</td>
         <td>${qaHtml}</td>
         <td>${devHtml}</td>
         <td>${changedHtml}</td>
       </tr>`;
-          }).join("");
+          }).join('');
           boardBody.innerHTML = rowsHtml;
         }
 
         /*** Add/remove handlers (kept for tests; UI now uses explicit forms) ***/
         function handlePeopleAddRemove(select, listName) {
           const v = select.value;
-          if (v === "__add__") {
-            const name = prompt("Add name (e.g., Andrew)");
+          if (v === '__add__') {
+            const name = prompt('Add name (e.g., Andrew)');
             if (name && name.trim()) {
               const clean = name.trim();
               if (!state[listName].some((x) => x.toLowerCase() === clean.toLowerCase())) {
@@ -457,15 +235,15 @@
               }
               fillPeople(select, state[listName]);
               select.value = clean;
-              select.setAttribute("data-current", clean);
+              select.setAttribute('data-current', clean);
             } else {
-              select.value = "";
+              select.value = '';
             }
-          } else if (v === "__remove__") {
-            const current = select.getAttribute("data-current") || "";
+          } else if (v === '__remove__') {
+            const current = select.getAttribute('data-current') || '';
             if (!current) {
-              alert("Select a name first, then choose “Remove selected”.");
-              select.value = "";
+              alert('Select a name first, then choose “Remove selected”.');
+              select.value = '';
               return;
             }
             const idx = state[listName].findIndex((x) => x.toLowerCase() === current.toLowerCase());
@@ -474,62 +252,65 @@
               save();
             }
             fillPeople(select, state[listName]);
-            select.value = "";
-            select.setAttribute("data-current", "");
+            select.value = '';
+            select.setAttribute('data-current', '');
           } else {
-            select.setAttribute("data-current", v);
+            select.setAttribute('data-current', v);
           }
         }
 
         function handleStoryAddRemove() {
           const v = storySel.value;
-          if (v === "__add__") {
-            const url = prompt("Paste Azure DevOps work item URL (optional):");
-            const title = prompt("Story title:");
+          if (v === '__add__') {
+            const url = prompt('Paste Azure DevOps work item URL (optional):');
+            const title = prompt('Story title:');
             if (!title || !title.trim()) {
-              storySel.value = "";
+              storySel.value = '';
               return;
             }
             const idMatch = url ? url.match(/\/edit\/(\d+)/) : null;
             const id = idMatch ? idMatch[1] : String(Date.now());
             if (!state.stories.some((s) => s.id === id)) {
-              state.stories.push({ id, title: title.trim(), url: (url || "").trim() });
+              state.stories.push({ id, title: title.trim(), url: (url || '').trim() });
               save();
             }
             fillStories();
             storySel.value = id;
-            storySel.setAttribute("data-current", id);
-          } else if (v === "__remove__") {
-            const curId = storySel.getAttribute("data-current");
+            storySel.setAttribute('data-current', id);
+          } else if (v === '__remove__') {
+            const curId = storySel.getAttribute('data-current');
             if (!curId) {
-              alert("Select a story first, then choose “Remove selected story”.");
-              storySel.value = "";
+              alert('Select a story first, then choose “Remove selected story”.');
+              storySel.value = '';
               return;
             }
             const idx = state.stories.findIndex((s) => s.id === curId);
-            if (idx > -1 && confirm(`Remove story "${state.stories[idx].title}" from the dropdown?`)) {
+            if (
+              idx > -1 &&
+              confirm(`Remove story "${state.stories[idx].title}" from the dropdown?`)
+            ) {
               state.stories.splice(idx, 1);
               save();
             }
             fillStories();
-            storySel.value = "";
-            storySel.setAttribute("data-current", "");
+            storySel.value = '';
+            storySel.setAttribute('data-current', '');
           } else {
-            storySel.setAttribute("data-current", v);
+            storySel.setAttribute('data-current', v);
           }
         }
 
         /*** Admin form logic ***/
         function storyIdFromUrl(url) {
-          const m = (url || "").match(/\/edit\/(\d+)/);
-          return m ? m[1] : "";
+          const m = (url || '').match(/\/edit\/(\d+)/);
+          return m ? m[1] : '';
         }
         function upsertStoryFromForm() {
-          let id = (storyIdIn.value || "").trim();
-          const url = (storyUrlIn.value || "").trim();
-          const title = (storyTitleIn.value || "").trim();
+          let id = (storyIdIn.value || '').trim();
+          const url = (storyUrlIn.value || '').trim();
+          const title = (storyTitleIn.value || '').trim();
           if (!title) {
-            alert("Title is required.");
+            alert('Title is required.');
             return;
           }
           if (!id) id = storyIdFromUrl(url) || String(Date.now());
@@ -541,7 +322,7 @@
           fillStories();
           renderStoryAdminList();
           renderTable();
-          storyIdIn.value = storyUrlIn.value = storyTitleIn.value = "";
+          storyIdIn.value = storyUrlIn.value = storyTitleIn.value = '';
         }
         function removeStoryById(id) {
           const i = state.stories.findIndex((s) => s.id === id);
@@ -555,18 +336,19 @@
         }
 
         function addNameTo(listName, inputEl) {
-          const name = (inputEl.value || "").trim();
+          const name = (inputEl.value || '').trim();
           if (!name) {
-            alert("Name is required.");
+            alert('Name is required.');
             return;
           }
-          if (!state[listName].some((x) => x.toLowerCase() === name.toLowerCase())) state[listName].push(name);
+          if (!state[listName].some((x) => x.toLowerCase() === name.toLowerCase()))
+            state[listName].push(name);
           save();
           fillPeople(qaSel, state.qaPeople);
           fillPeople(devSel, state.devPeople);
           renderPeopleAdminLists();
           renderTable();
-          inputEl.value = "";
+          inputEl.value = '';
         }
         function removeNameFrom(listName, name) {
           const idx = state[listName].findIndex((x) => x.toLowerCase() === name.toLowerCase());
@@ -580,139 +362,13 @@
           renderTable();
         }
 
-        /*** Render admin lists ***/
-        function renderStoryAdminList() {
-          storyList.innerHTML = state.stories
-            .map(
-              (s) => `<li>
-      <div style="flex:1; min-width:0">
-        <div style="font-weight:600; white-space:nowrap; overflow:hidden; text-overflow:ellipsis">${escapeHtml(s.title)}</div>
-        <div class="tiny">ID: ${escapeHtml(s.id)} ${s.url ? "• " + escapeHtml(s.url) : ""}</div>
-      </div>
-      <div class="actions">
-        <button class="ghost" data-act="edit" data-id="${escapeHtml(s.id)}">Edit</button>
-        <button class="ghost" data-act="del" data-id="${escapeHtml(s.id)}">Delete</button>
-      </div>
-    </li>`
-            )
-            .join("");
-        }
-        storyList.addEventListener("click", (e) => {
-          const btn = e.target.closest("button");
-          if (!btn) return;
-          const id = btn.getAttribute("data-id");
-          const act = btn.getAttribute("data-act");
-          const s = state.stories.find((x) => x.id === id);
-          if (!s) return;
-          if (act === "edit") {
-            storyIdIn.value = s.id;
-            storyTitleIn.value = s.title;
-            storyUrlIn.value = s.url || "";
-          } else if (act === "del") {
-            if (confirm(`Delete story "${s.title}"?`)) removeStoryById(id);
-          }
-        });
-
-        function renderPeopleAdminLists() {
-          qaList.innerHTML = state.qaPeople
-            .filter(Boolean)
-            .map((n) => `<li><span>${escapeHtml(n)}</span><div class="actions"><button class="ghost" data-n="${escapeHtml(n)}" data-list="qaPeople">Delete</button></div></li>`)
-            .join("");
-          devList.innerHTML = state.devPeople
-            .filter(Boolean)
-            .map((n) => `<li><span>${escapeHtml(n)}</span><div class="actions"><button class="ghost" data-n="${escapeHtml(n)}" data-list="devPeople">Delete</button></div></li>`)
-            .join("");
-        }
-        qaList.addEventListener("click", (e) => {
-          const b = e.target.closest("button");
-          if (!b) return;
-          const name = b.getAttribute("data-n");
-          if (confirm(`Delete ${name}?`)) removeNameFrom("qaPeople", name);
-        });
-        devList.addEventListener("click", (e) => {
-          const b = e.target.closest("button");
-          if (!b) return;
-          const name = b.getAttribute("data-n");
-          if (confirm(`Delete ${name}?`)) removeNameFrom("devPeople", name);
-        });
-
-        /*** Submit ***/
-        submitBtn.addEventListener("click", function () {
-          const env = envSel.value;
-          const st = statusSel.value || "available";
-          let storyId = storySel.value;
-          if (storyId.startsWith("__")) storyId = "";
-          let qa = qaSel.value;
-          if (qa.startsWith("__")) qa = "";
-          let dev = devSel.value;
-          if (dev.startsWith("__")) dev = "";
-
-          const row = state.rows[env] || { status: "available", storyId: "", qa: "", dev: "", changed: "" };
-          row.status = st;
-          row.storyId = storyId;
-          row.qa = qa;
-          row.dev = dev;
-          row.changed = nowStamp();
-          state.rows[env] = row;
-          save();
-          renderTable();
-
-          if (storyId) storySel.setAttribute("data-current", storyId);
-          if (qa) qaSel.setAttribute("data-current", qa);
-          if (dev) devSel.setAttribute("data-current", dev);
-        });
-
-        /*** Change listeners (legacy add/remove still supported) ***/
-        storySel.addEventListener("change", function () {
-          const v = storySel.value;
-          if (v === "__add__" || v === "__remove__") return handleStoryAddRemove();
-          storySel.setAttribute("data-current", v);
-        });
-        qaSel.addEventListener("change", function () {
-          const v = qaSel.value;
-          if (v === "__add__" || v === "__remove__") return handlePeopleAddRemove(qaSel, "qaPeople");
-          qaSel.setAttribute("data-current", v);
-        });
-        devSel.addEventListener("change", function () {
-          const v = devSel.value;
-          if (v === "__add__" || v === "__remove__") return handlePeopleAddRemove(devSel, "devPeople");
-          devSel.setAttribute("data-current", v);
-        });
-
-        /*** Admin buttons ***/
-        storyAddBtn.addEventListener("click", upsertStoryFromForm);
-        qaAddBtn.addEventListener("click", () => addNameTo("qaPeople", qaAddIn));
-        devAddBtn.addEventListener("click", () => addNameTo("devPeople", devAddIn));
-
-        /*** Reset seed ***/
-        resetSeed.addEventListener("click", () => {
-          if (confirm("Reset to sample data? This will clear your current board in this browser.")) {
-            state = seed();
-            save();
-            fillEnv();
-            fillStories();
-            fillPeople(qaSel, state.qaPeople);
-            fillPeople(devSel, state.devPeople);
-            renderTable();
-            renderStoryAdminList();
-            renderPeopleAdminLists();
-            storySel.setAttribute("data-current", "");
-            qaSel.setAttribute("data-current", "");
-            devSel.setAttribute("data-current", "");
-          }
-        });
-
         /*** Initial render ***/
-        fillEnv();
-        fillStories();
-        fillPeople(qaSel, state.qaPeople);
-        fillPeople(devSel, state.devPeople);
         renderTable();
         renderStoryAdminList();
         renderPeopleAdminLists();
-        storySel.setAttribute("data-current", "");
-        qaSel.setAttribute("data-current", "");
-        devSel.setAttribute("data-current", "");
+        storySel.setAttribute('data-current', '');
+        qaSel.setAttribute('data-current', '');
+        devSel.setAttribute('data-current', '');
 
         /*** Self-tests (console) — keep existing, add more for new forms ***/
         function runTests() {
@@ -723,73 +379,97 @@
             state = clone;
 
             // Existing tests
-            console.assert(escapeHtml("<b>") === "&lt;b&gt;", "escapeHtml should escape < and >");
-            console.assert(truncate("abcdefghij", 5) === "abcd…", "truncate should add ellipsis");
+            console.assert(escapeHtml('<b>') === '&lt;b&gt;', 'escapeHtml should escape < and >');
+            console.assert(truncate('abcdefghij', 5) === 'abcd…', 'truncate should add ellipsis');
 
-            const sel = document.createElement("select");
+            const sel = document.createElement('select');
             fillPeople(sel, state.qaPeople);
             const oldPrompt = window.prompt;
             const oldConfirm = window.confirm;
-            window.prompt = () => "Zed";
+            window.prompt = () => 'Zed';
             window.confirm = () => true;
-            sel.value = "__add__";
-            handlePeopleAddRemove(sel, "qaPeople");
-            console.assert(state.qaPeople.map((x) => x.toLowerCase()).includes("zed"), "person should be added");
-            sel.setAttribute("data-current", "Zed");
-            sel.value = "__remove__";
-            handlePeopleAddRemove(sel, "qaPeople");
-            console.assert(!state.qaPeople.map((x) => x.toLowerCase()).includes("zed"), "person should be removed");
+            sel.value = '__add__';
+            handlePeopleAddRemove(sel, 'qaPeople');
+            console.assert(
+              state.qaPeople.map((x) => x.toLowerCase()).includes('zed'),
+              'person should be added'
+            );
+            sel.setAttribute('data-current', 'Zed');
+            sel.value = '__remove__';
+            handlePeopleAddRemove(sel, 'qaPeople');
+            console.assert(
+              !state.qaPeople.map((x) => x.toLowerCase()).includes('zed'),
+              'person should be removed'
+            );
             window.prompt = oldPrompt;
             window.confirm = oldConfirm;
 
             renderTable();
-            console.assert(!boardBody.innerHTML.includes("&lt;span"), "placeholders should render, not be escaped");
+            console.assert(
+              !boardBody.innerHTML.includes('&lt;span'),
+              'placeholders should render, not be escaped'
+            );
 
             // Added tests
             // Story admin add/update/remove
-            storyTitleIn.value = "A new story";
-            storyUrlIn.value = "https://example.com/workitems/edit/999999";
-            storyIdIn.value = "";
+            storyTitleIn.value = 'A new story';
+            storyUrlIn.value = 'https://example.com/workitems/edit/999999';
+            storyIdIn.value = '';
             upsertStoryFromForm();
             console.assert(
-              state.stories.some((s) => s.id === "999999"),
-              "story should be added via admin form"
+              state.stories.some((s) => s.id === '999999'),
+              'story should be added via admin form'
             );
-            storyTitleIn.value = "A newer title";
-            storyIdIn.value = "999999";
-            storyUrlIn.value = "https://example.com/workitems/edit/999999";
+            storyTitleIn.value = 'A newer title';
+            storyIdIn.value = '999999';
+            storyUrlIn.value = 'https://example.com/workitems/edit/999999';
             upsertStoryFromForm();
-            console.assert(state.stories.find((s) => s.id === "999999").title === "A newer title", "story should be updated via admin form");
-            removeStoryById("999999");
-            console.assert(!state.stories.some((s) => s.id === "999999"), "story should be removed via admin function");
+            console.assert(
+              state.stories.find((s) => s.id === '999999').title === 'A newer title',
+              'story should be updated via admin form'
+            );
+            removeStoryById('999999');
+            console.assert(
+              !state.stories.some((s) => s.id === '999999'),
+              'story should be removed via admin function'
+            );
 
             // People admin add/remove
-            qaAddIn.value = "QA X";
-            addNameTo("qaPeople", qaAddIn);
-            console.assert(state.qaPeople.includes("QA X"), "QA should be added via admin form");
-            removeNameFrom("qaPeople", "QA X");
-            console.assert(!state.qaPeople.includes("QA X"), "QA should be removed via admin function");
+            qaAddIn.value = 'QA X';
+            addNameTo('qaPeople', qaAddIn);
+            console.assert(state.qaPeople.includes('QA X'), 'QA should be added via admin form');
+            removeNameFrom('qaPeople', 'QA X');
+            console.assert(
+              !state.qaPeople.includes('QA X'),
+              'QA should be removed via admin function'
+            );
 
             // Submit updates row
             envSel.value = ENVIRONMENTS[0];
-            statusSel.value = "testing";
-            qaSel.value = "";
-            devSel.value = "";
-            storySel.value = "";
+            statusSel.value = 'testing';
+            qaSel.value = '';
+            devSel.value = '';
+            storySel.value = '';
             submitBtn.click();
-            console.assert(state.rows[ENVIRONMENTS[0]].status === "testing", "submit should set status");
-            console.assert(state.rows[ENVIRONMENTS[0]].changed.length > 0, "submit should stamp changed datetime");
+            console.assert(
+              state.rows[ENVIRONMENTS[0]].status === 'testing',
+              'submit should set status'
+            );
+            console.assert(
+              state.rows[ENVIRONMENTS[0]].changed.length > 0,
+              'submit should stamp changed datetime'
+            );
 
             state = origState;
             __TEST_MODE = false;
             renderTable();
-            console.log("[FEB] Self-tests passed");
+            console.log('[FEB] Self-tests passed');
           } catch (e) {
             try {
               __TEST_MODE = false;
               renderTable();
             } catch {}
-            console.warn("[FEB] Self-tests failed", e);
+            console.warn('[FEB] Self-tests failed', e);
           }
         }
 
