@@ -29,6 +29,7 @@
 #modalCancelBtn {
   display: none;
 }
+#modalMessage { white-space: pre-line; }
 /* --- Added custom styles --- */
 :root {
         --cm: 38px; /* ~1cm on most displays */
