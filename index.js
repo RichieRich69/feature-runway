@@ -233,7 +233,7 @@ function showConfirm(message, onConfirm) {
             const storyHtml = story
               ? `<a class="story copy-link" href="${escapeHtml(
                   story.url
-                )}" target="_blank" rel="noopener">${escapeHtml(story.storyId)}: ${escapeHtml(story.title)}</a>`
+                )}" target="_blank" rel="noopener">${escapeHtml(story.id)}: ${escapeHtml(story.title)}</a>`
               : '<span class="muted">—</span>';
             const qaHtml = r.qa ? escapeHtml(r.qa) : '<span class="muted">—</span>';
             const devHtml = r.dev ? escapeHtml(r.dev) : '<span class="muted">—</span>';
