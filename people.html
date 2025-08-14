@@ -11,6 +11,15 @@
       <!-- People CRUD -->
       <div class="card form-card">
         <h3 class="mb-12">Manage People</h3>
+        <div id="modalOverlay" class="modal-overlay" style="display: none">
+          <div class="modal-box">
+            <div id="modalMessage"></div>
+            <div class="modal-actions">
+              <button id="modalOkBtn" class="primary">OK</button>
+              <button id="modalCancelBtn" class="secondary" style="display: none">Cancel</button>
+            </div>
+          </div>
+        </div>
         <div class="inline mb-8">
           <div class="flex-1">
             <label for="qaAddIn">QA / Tester</label>

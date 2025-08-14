@@ -1,3 +1,34 @@
+/* Modal styles */
+.modal-overlay {
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: rgba(0,0,0,0.3);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+.modal-overlay[style*="display: flex"] {
+  display: flex !important;
+}
+.modal-box {
+  background: #fff;
+  padding: 24px 20px 16px 20px;
+  border-radius: 8px;
+  box-shadow: 0 2px 16px rgba(0,0,0,0.15);
+  min-width: 260px;
+  max-width: 90vw;
+}
+.modal-actions {
+  margin-top: 18px;
+  text-align: right;
+}
+.modal-actions button {
+  margin-left: 8px;
+}
+#modalCancelBtn {
+  display: none;
+}
 /* --- Added custom styles --- */
 :root {
         --cm: 38px; /* ~1cm on most displays */

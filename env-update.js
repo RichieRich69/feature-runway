@@ -1,5 +1,46 @@
 // env-update.js
 // Handles the logic for the Environment update form on env-update.html
+// Modal logic for alerts and confirms
+function showModal(message, options = {}) {
+  const overlay = document.getElementById('modalOverlay');
+  const msg = document.getElementById('modalMessage');
+  const okBtn = document.getElementById('modalOkBtn');
+  const cancelBtn = document.getElementById('modalCancelBtn');
+  msg.textContent = message;
+  overlay.style.display = 'flex';
+  let resolved = false;
+  function cleanup() {
+    overlay.style.display = 'none';
+    okBtn.onclick = null;
+    cancelBtn.onclick = null;
+    cancelBtn.style.display = 'none';
+  }
+  if (options.confirm) {
+    cancelBtn.style.display = '';
+    okBtn.onclick = () => {
+      if (!resolved) options.onConfirm && options.onConfirm();
+      resolved = true;
+      cleanup();
+    };
+    cancelBtn.onclick = () => {
+      resolved = true;
+      cleanup();
+    };
+  } else {
+    cancelBtn.style.display = 'none';
+    okBtn.onclick = () => {
+      cleanup();
+    };
+  }
+}
+
+function showAlert(message) {
+  showModal(message);
+}
+
+function showConfirm(message, onConfirm) {
+  showModal(message, { confirm: true, onConfirm });
+}
 
 (function () {
   "use strict";
@@ -65,18 +106,7 @@
   }
 
   function seed() {
-    const stories = [
-      {
-        id: "280305",
-        title: "Payments > International Payments History: Show Transaction Status and POP Download or Send",
-        url: "https://capricorngroupportfolio.visualstudio.com/Digital%20Portfolio/_workitems/edit/280305",
-      },
-      {
-        id: "284166",
-        title: "User Story 284166: BG > WUC Postpaid Water Microservice Implementation",
-        url: "https://capricorngroupportfolio.visualstudio.com/Digital%20Portfolio/_workitems/edit/284166",
-      },
-    ];
+    const stories = [];
     const rows = {};
     ENVIRONMENTS.forEach((env) => (rows[env.name] = { status: "available", storyId: "", qa: "", dev: "", changed: "" }));
     ["Feature 2 BW", "Feature 2 BG"].forEach((env) => (rows[env] = { status: "testing", storyId: "280305", qa: "Andrew", dev: "Richard", changed: "06 Aug 2025 09:00" }));
@@ -138,6 +168,6 @@
     row.changed = nowStamp();
     state.rows[env] = row;
     await save();
-    alert(`Updated ${env}: Status=${st}, Story=${storyId}, QA=${qa}, Dev=${dev}, Changed=${row.changed}`);
+    showAlert(`Updated ${env}: Status=${st}, Story=${storyId}, QA=${qa}, Dev=${dev}, Changed=${row.changed}`);
   });
 })();
