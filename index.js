@@ -245,7 +245,7 @@ function showConfirm(message, onConfirm) {
               : escapeHtml(env);
             return `<tr>
         <td>${envHtml}</td>
-        <td style="text-align:center"><span class="emoji">${st.emoji}</span> <span>${escapeHtml(
+        <td style="text-align:left"><span class="emoji">${st.emoji}</span> <span>${escapeHtml(
               st.label
             )}</span></td>
         <td>${storyHtml}</td>
