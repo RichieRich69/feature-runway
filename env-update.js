@@ -168,6 +168,11 @@ function showConfirm(message, onConfirm) {
     row.changed = nowStamp();
     state.rows[env] = row;
     await save();
-    showAlert(`Updated ${env}: Status=${st}, Story=${storyId}, QA=${qa}, Dev=${dev}, Changed=${row.changed}`);
+
+    if (!storyId && !qa && !dev && st === "available") {
+      showAlert(`Cleared ${env}<br />Environment is now available. <br /><br />Refresh page...`);
+    } else {
+      showAlert(`Updated ${env}<br />Status=${st}, Story=${storyId}, QA=${qa}, Dev=${dev}. <br /><br />Refresh page...`);
+    }
   });
 })();
