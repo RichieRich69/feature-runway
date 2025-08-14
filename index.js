@@ -233,7 +233,7 @@ function showConfirm(message, onConfirm) {
             const storyHtml = story
               ? `<a class="story copy-link" href="${escapeHtml(
                   story.url
-                )}" target="_blank" rel="noopener">${escapeHtml(story.title)}</a>`
+                )}" target="_blank" rel="noopener">${escapeHtml(story.storyId)}: ${escapeHtml(story.title)}</a>`
               : '<span class="muted">—</span>';
             const qaHtml = r.qa ? escapeHtml(r.qa) : '<span class="muted">—</span>';
             const devHtml = r.dev ? escapeHtml(r.dev) : '<span class="muted">—</span>';
@@ -244,15 +244,15 @@ function showConfirm(message, onConfirm) {
                 )} <span title=\"Open environment\"></span></a>`
               : escapeHtml(env);
             return `<tr>
-        <td>${envHtml}</td>
-        <td style="text-align:left"><span class="emoji">${st.emoji}</span> <span>${escapeHtml(
-              st.label
-            )}</span></td>
-        <td>${storyHtml}</td>
-        <td>${qaHtml}</td>
-        <td>${devHtml}</td>
-        <td>${changedHtml}</td>
-      </tr>`;
+                      <td>${envHtml}</td>
+                      <td style="text-align:left"><span class="emoji">${st.emoji}</span> <span>${escapeHtml(
+                            st.label
+                          )}</span></td>
+                      <td>${storyHtml}</td>
+                      <td>${qaHtml}</td>
+                      <td>${devHtml}</td>
+                      <td>${changedHtml}</td>
+                    </tr>`;
           }).join('');
           boardBody.innerHTML = rowsHtml;
 
