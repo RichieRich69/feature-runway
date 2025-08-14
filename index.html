@@ -8,6 +8,15 @@
   </head>
   <body>
     <div class="wrap">
+      <div id="modalOverlay" class="modal-overlay" style="display: none">
+        <div class="modal-box">
+          <div id="modalMessage"></div>
+          <div class="modal-actions">
+            <button id="modalOkBtn" class="primary">OK</button>
+            <button id="modalCancelBtn" class="secondary" style="display: none">Cancel</button>
+          </div>
+        </div>
+      </div>
       <div class="card table-card">
         <table id="boardTable" aria-label="Feature Environment Board">
           <thead>
@@ -24,6 +33,6 @@
         </table>
       </div>
     </div>
-    <script src="index.js"></script>
+    <script src="index.js?version=1.0"></script>
   </body>
 </html>

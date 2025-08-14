@@ -1,3 +1,45 @@
+// edit.js - logic for edit.html
+// Modal logic for alerts and confirms
+function showModal(message, options = {}) {
+  const overlay = document.getElementById('modalOverlay');
+  const msg = document.getElementById('modalMessage');
+  const okBtn = document.getElementById('modalOkBtn');
+  const cancelBtn = document.getElementById('modalCancelBtn');
+  msg.textContent = message;
+  overlay.style.display = 'flex';
+  let resolved = false;
+  function cleanup() {
+    overlay.style.display = 'none';
+    okBtn.onclick = null;
+    cancelBtn.onclick = null;
+    cancelBtn.style.display = 'none';
+  }
+  if (options.confirm) {
+    cancelBtn.style.display = '';
+    okBtn.onclick = () => {
+      if (!resolved) options.onConfirm && options.onConfirm();
+      resolved = true;
+      cleanup();
+    };
+    cancelBtn.onclick = () => {
+      resolved = true;
+      cleanup();
+    };
+  } else {
+    cancelBtn.style.display = 'none';
+    okBtn.onclick = () => {
+      cleanup();
+    };
+  }
+}
+
+function showAlert(message) {
+  showModal(message);
+}
+
+function showConfirm(message, onConfirm) {
+  showModal(message, { confirm: true, onConfirm });
+}
 (function () {
         'use strict';
         /*** Constants ***/
