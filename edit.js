@@ -51,7 +51,6 @@
     state = await load();
     if (!state) state = { stories: [], qaPeople: [], devPeople: [] };
     renderStoryAdminList();
-    renderPeopleAdminLists();
   })();
 
   // --- DOM ---
@@ -120,51 +119,6 @@
     }
   });
 
-  // --- People logic ---
-  function addNameTo(listName, inputEl) {
-    const name = (inputEl.value || "").trim();
-    if (!name) {
-      alert("Name is required.");
-      return;
-    }
-    if (!state[listName].some((x) => x.toLowerCase() === name.toLowerCase())) state[listName].push(name);
-    save();
-    renderPeopleAdminLists();
-    inputEl.value = "";
-  }
-  function removeNameFrom(listName, name) {
-    const idx = state[listName].findIndex((x) => x.toLowerCase() === name.toLowerCase());
-    if (idx > -1) {
-      state[listName].splice(idx, 1);
-      save();
-      renderPeopleAdminLists();
-    }
-  }
-  function renderPeopleAdminLists() {
-    qaList.innerHTML = state.qaPeople
-      .filter(Boolean)
-      .map((n) => `<li><span>${escapeHtml(n)}</span><div class="actions"><button class="ghost" data-n="${escapeHtml(n)}" data-list="qaPeople">Delete</button></div></li>`)
-      .join("");
-    devList.innerHTML = state.devPeople
-      .filter(Boolean)
-      .map((n) => `<li><span>${escapeHtml(n)}</span><div class="actions"><button class="ghost" data-n="${escapeHtml(n)}" data-list="devPeople">Delete</button></div></li>`)
-      .join("");
-  }
-  qaList.addEventListener("click", (e) => {
-    const b = e.target.closest("button");
-    if (!b) return;
-    const name = b.getAttribute("data-n");
-    if (confirm(`Delete ${name}?`)) removeNameFrom("qaPeople", name);
-  });
-  devList.addEventListener("click", (e) => {
-    const b = e.target.closest("button");
-    if (!b) return;
-    const name = b.getAttribute("data-n");
-    if (confirm(`Delete ${name}?`)) removeNameFrom("devPeople", name);
-  });
-
   // --- Button events ---
   storyAddBtn.addEventListener("click", upsertStoryFromForm);
-  qaAddBtn.addEventListener("click", () => addNameTo("qaPeople", qaAddIn));
-  devAddBtn.addEventListener("click", () => addNameTo("devPeople", devAddIn));
 })();
