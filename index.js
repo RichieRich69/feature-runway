@@ -272,7 +272,7 @@ function showConfirm(message, onConfirm) {
             if (ok) {
               showAlert('Link copied. Paste it into a new tab (Ctrl/Cmd+L, paste, Enter).');
             } else {
-              showAlert('Copy this link, then paste it into a new tab:<br /><br />' + url);
+              showAlert('Copy this link, then paste it into a new tab:\n\n' + url);
             }
           });
         }

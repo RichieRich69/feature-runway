@@ -170,9 +170,9 @@ function showConfirm(message, onConfirm) {
     await save();
 
     if (!storyId && !qa && !dev && st === "available") {
-      showAlert(`Cleared ${env}<br />Environment is now available. <br /><br />Refresh page...`);
+      showAlert(`Cleared ${env}\n\nEnvironment is now available. \n\nRefresh page...`);
     } else {
-      showAlert(`Updated ${env}<br />Status=${st}, Story=${storyId}, QA=${qa}, Dev=${dev}. <br /><br />Refresh page...`);
+      showAlert(`Updated ${env}\n\nStatus=${st}, Story=${storyId}, QA=${qa}, Dev=${dev}. \n\nRefresh page...`);
     }
   });
 })();
